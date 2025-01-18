@@ -27,10 +27,14 @@ class BreadcrumbStructuredDataProvider implements StructuredDataProviderInterfac
     {
         $breadcrumbs = [];
         $excludedDoktypes = $this->getExcludedDoktypes();
+        $excludeNotInMenu = $this->getExcludeNotInMenu();
         $iterator = 1;
         $siteRootFound = false;
         foreach ($this->getRootLine() as $page) {
             if ($page['hidden'] === 1) {
+                continue;
+            }
+            if ($page['nav_hide'] === 1 && $excludeNotInMenu) {
                 continue;
             }
             $siteRootFound = $siteRootFound || $page['is_siteroot'];
@@ -83,6 +87,17 @@ class BreadcrumbStructuredDataProvider implements StructuredDataProviderInterfac
             return GeneralUtility::intExplode(',', $this->configuration['excludedDoktypes']);
         }
         return [];
+    }
+
+    /**
+     * @return int
+     */
+    protected function getExcludeNotInMenu(): int
+    {
+        if (!empty($this->configuration['excludeNotInMenu'] ?? '')) {
+            return (int)$this->configuration['excludeNotInMenu'];
+        }
+        return 0;
     }
 
     /**
