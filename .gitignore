@@ -17,3 +17,4 @@ yarn.lock
 Documentation-GENERATED-temp
 /public
 .phplint.cache
+.vscode
